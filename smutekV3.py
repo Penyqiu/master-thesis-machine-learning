@@ -57,7 +57,7 @@ while True:
             eye_frame = np.repeat(eye_frame[..., np.newaxis], 3, axis=2)  # Convert grayscale to 3 channels
             eye_frame = np.expand_dims(eye_frame, axis=0)
             prediction = model.predict(eye_frame)[0][0]
-            status = "open" if prediction > 0.5 else "closed"
+            status = "open" if prediction > 0.9 else "closed"
             print(f"Model confidence for {eye} eye: {prediction:.2f} ({status})")
             if eye == 'right':
                 rpred = [prediction]
@@ -66,7 +66,7 @@ while True:
             break
 
     # Determine if both eyes are closed and update the score accordingly
-    if rpred[0] < 0.8 and lpred[0] < 0.8:
+    if rpred[0] < 0.1 and lpred[0] < 0.1:
         score += 1
         cv2.putText(frame, "Closed", (10, height-20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
         if score > threshold + 1:
